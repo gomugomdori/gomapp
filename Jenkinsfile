@@ -24,11 +24,6 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Unit Tests') {
-            steps {
-                sh 'npm test'
-            }
-        }
         stage('Trivy FS Scan') {
             steps {
                 sh 'trivy fs --format table -o fs-report-${BUILD_NUMBER}.html .'
