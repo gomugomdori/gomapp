@@ -6,7 +6,7 @@ pipeline {
     }
     
     environment {
-        SCANNER_HOME= tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner'
         ECR_REGISTRY = '394952106077.dkr.ecr.ap-northeast-2.amazonaws.com/gomugomdori'
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh 'SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=gomapp -Dsonar.projectName=gomapp'
+                    sh '${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=gomapp -Dsonar.projectName=gomapp'
                 }   
             }
         }
