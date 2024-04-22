@@ -70,17 +70,14 @@ pipeline {
         }
     }
     post {
-		always {
-	        archiveArtifacts artifacts: '*.html', fingerprint: true
-	    }
+	always {
+	    archiveArtifacts artifacts: '*.html', fingerprint: true
+	}
         success {
-            slackSend (color: '#36A64F', message: "SUCCESS: GOMAPP (version : ${BUILD_NUMBER}) CI / CD completed successfully.")
+	    slackSend (color: '#36A64F', message: "SUCCESS: GOMAPP (version : ${BUILD_NUMBER}) CI / CD completed successfully.")
         }
         failure {
-            // 실패 원인과 실패한 스테이지 정보를 포함한 메시지 구성
-            def failedStage = currentBuild.rawBuild.getExecution().getCurrentHeads().find() // 실패한 스테이지 검색
-            def failureCause = currentBuild.rawBuild.getCauses().find() // 실패 원인 검색
-            slackSend (color: '#FF0000', message: "FAILURE: GOMAPP (version : ${BUILD_NUMBER}) CI / CD failed at stage '${failedStage.displayName}'. Reason: ${failureCause.shortDescription}. Check Jenkins logs for more details.")
+	    slackSend (color: '#FF0000', message: "FAILURE: GOMAPP (version : ${BUILD_NUMBER}) CI / CD failed. Check Jenkins logs for more details.")
         }
     }
 }
