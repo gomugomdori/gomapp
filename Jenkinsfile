@@ -67,6 +67,7 @@ pipeline {
     post {
 	always {
 	    archiveArtifacts artifacts: '*.html', fingerprint: true
+        cleanWs()
 	}
         success {
 	    slackSend (color: '#36A64F', message: "SUCCESS: GOMAPP (version : ${BUILD_NUMBER}) CI / CD completed successfully.")
