@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Trivy Image Scan') {
             steps {
-                sh 'trivy image --format table -o image-report-${BUILD_NUMBER}.html ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}'
+                sh 'trivy --scanners vuln image --format table -o image-report-${BUILD_NUMBER}.html ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}'
             }
         }
         stage('Docker Push Image') {
