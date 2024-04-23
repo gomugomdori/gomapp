@@ -54,11 +54,12 @@ pipeline {
             steps {
                 // ECR 로그인
                 sh "aws ecr get-login-password | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-                withDockerRegistry(credentialsId: "${REGISTRY_CREDENTIALS_ID}", url: "${ECR_REGISTRY}") {
-                    // Docker 이미지 푸시
-                    sh "docker push ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}"
-                    sh "docker push ${ECR_REGISTRY}/gomapp:latest"
-                }
+                // Docker 이미지 푸시
+                sh "docker push ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}"
+                sh "docker push ${ECR_REGISTRY}/gomapp:latest"
+                // 푸시한 이미지 삭제
+                sh "docker rmi ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}"
+                sh "docker rmi ${ECR_REGISTRY}/gomapp:latest"
             }
         }
     }
