@@ -40,11 +40,9 @@ pipeline {
             steps {
                 // ECR 로그인
                 sh "aws ecr get-login-password | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-                withDockerRegistry(credentialsId: "${REGISTRY_CREDENTIALS_ID}", url: "${ECR_REGISTRY}") {
-                    // Docker 이미지 빌드 및 태그
-                    sh "docker build -t ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ."
-                    sh "docker tag ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ${ECR_REGISTRY}/gomapp:latest"
-                }
+                // Docker 이미지 빌드 및 태그
+                sh "docker build -t ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ."
+                sh "docker tag ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ${ECR_REGISTRY}/gomapp:latest"
             }
         }
         stage('Trivy Image Scan') {
