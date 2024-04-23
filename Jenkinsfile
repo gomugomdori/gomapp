@@ -7,7 +7,7 @@ pipeline {
     
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        ECR_REGISTRY = '394952106077.dkr.ecr.ap-northeast-2.amazonaws.com/gomugomdori'
+        ECR_REGISTRY = '394952106077.dkr.ecr.ap-northeast-2.amazonaws.com/gomapp'
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         AWS_DEFAULT_REGION = "ap-northeast-2"
@@ -41,13 +41,13 @@ pipeline {
                 // ECR 로그인
                 sh "aws ecr get-login-password | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                 // Docker 이미지 빌드 및 태그
-                sh "docker build -t ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ."
-                sh "docker tag ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER} ${ECR_REGISTRY}/gomapp:latest"
+                sh "docker build -t ${ECR_REGISTRY}:${BUILD_NUMBER} ."
+                sh "docker tag ${ECR_REGISTRY}:${BUILD_NUMBER} ${ECR_REGISTRY}:latest"
             }
         }
         stage('Trivy Image Scan') {
             steps {
-                sh 'trivy --scanners vuln image --format table -o image-report-${BUILD_NUMBER}.html ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}'
+                sh 'trivy --scanners vuln image --format table -o image-report-${BUILD_NUMBER}.html ${ECR_REGISTRY}:${BUILD_NUMBER}'
             }
         }
         stage('Docker Push Image') {
@@ -55,11 +55,11 @@ pipeline {
                 // ECR 로그인
                 sh "aws ecr get-login-password | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                 // Docker 이미지 푸시
-                sh "docker push ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}"
-                sh "docker push ${ECR_REGISTRY}/gomapp:latest"
+                sh "docker push ${ECR_REGISTRY}:${BUILD_NUMBER}"
+                sh "docker push ${ECR_REGISTRY}:latest"
                 // 푸시한 이미지 삭제
-                sh "docker rmi ${ECR_REGISTRY}/gomapp:${BUILD_NUMBER}"
-                sh "docker rmi ${ECR_REGISTRY}/gomapp:latest"
+                sh "docker rmi ${ECR_REGISTRY}:${BUILD_NUMBER}"
+                sh "docker rmi ${ECR_REGISTRY}:latest"
             }
         }
     }
