@@ -6,7 +6,7 @@ const cors = require("cors"); // CORS 미들웨어를 가져옴
 dotenv.config(); // .env 파일에서 환경 변수를 로드하여 process.env에 설정
 
 const app = express(); // Express 애플리케이션을 생성
-const port = process.env.PORT; // 환경 변수에서 서버 포트 번호를 가져옴
+const port = process.env.PORT; // 환경 변수에서 서버 포트 번호를 가져옴.
 
 // MySQL 데이터베이스 연결 설정
 const db = mysql.createConnection({
